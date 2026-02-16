@@ -18,3 +18,43 @@ html, body {
   background-color: white;
   cursor: pointer;
 }
+
+/* Dropdown styles */
+.mat-mdc-select-panel {
+  border-radius: 8px !important;
+  background-color: #444 !important;
+  color: white !important;
+}
+
+.mat-mdc-option {
+  color: white !important;
+  background-color: #444 !important;
+  border-radius: 4px !important;
+  margin: 2px !important;
+}
+
+.mat-mdc-option:hover {
+  background-color: #555 !important;
+}
+
+.mat-mdc-option:focus {
+  background-color: #666 !important;
+}
+
+.mat-mdc-autocomplete-panel {
+  border-radius: 8px !important;
+  background-color: #444 !important;
+  color: white !important;
+}
+
+.mat-mdc-form-field-focus-overlay {
+  background-color: transparent !important;
+}
+
+.mat-mdc-input-element {
+  color: white !important;
+}
+
+.mat-mdc-form-field-outline {
+  color: #999 !important;
+}
