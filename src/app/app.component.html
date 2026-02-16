@@ -2,10 +2,37 @@
     <app-toolbar [toolbar_name]="this.projectName" id="appToolbar"></app-toolbar>
     <app-search #appSearch></app-search>
     <mat-sidenav-container class="sidenav-container">
-        <mat-sidenav #sidenav mode="side" [(opened)]="isSidenavOpen">
-            <h2 style="margin-left: 10px;">Advanced Analytics</h2>
-          <app-bivariate></app-bivariate>
-          <app-autocorrelation></app-autocorrelation>
+        <mat-sidenav #sidenav mode="side" [(opened)]="isSidenavOpen" class="sidebar">
+            <div class="sidebar-header">
+                <h2>Advanced Analytics</h2>
+                <button mat-icon-button class="close-btn" (click)="toggleSidenav()">
+                    <mat-icon>close</mat-icon>
+                </button>
+            </div>
+            <div class="tools-container">
+                <div class="tool-item">
+                    <div class="tool-header">
+                        <h3>Analyze Relationships Between Two Indicators</h3>
+                        <span class="info-icon" 
+                              matTooltip="This tool analyzes associations between a pair of indicators in the explorer. Select two indicators to explore their correlation and visualize the relationship on the map."
+                              matTooltipPosition="right">
+                            <mat-icon>info_outline</mat-icon>
+                        </span>
+                    </div>
+                    <app-bivariate></app-bivariate>
+                </div>
+                <div class="tool-item">
+                    <div class="tool-header">
+                        <h3>Explore Spatial Patterns and Hotspots</h3>
+                        <span class="info-icon" 
+                              matTooltip="This tool analyzes clustering patterns of an indicator and identifies hot and cold spots using spatial autocorrelation analysis."
+                              matTooltipPosition="right">
+                            <mat-icon>info_outline</mat-icon>
+                        </span>
+                    </div>
+                    <app-autocorrelation></app-autocorrelation>
+                </div>
+            </div>
         </mat-sidenav>
         <mat-sidenav-content>
             
