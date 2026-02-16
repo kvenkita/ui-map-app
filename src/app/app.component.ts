@@ -12,13 +12,16 @@ import { MapCategory } from './shared/models/map-category';
 import { TimeSliderComponent } from "./time-slider/time-slider.component";
 
 import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatIconModule } from '@angular/material/icon';
+import { MatButtonModule } from '@angular/material/button';
 import { SearchComponent } from "./search/search.component";
 import { BivariateComponent } from "./analysis/bivariate/bivariate.component";
 import { AutocorrelationComponent } from "./analysis/autocorrelation/autocorrelation.component";
 
 @Component({
   selector: 'app-root',
-  imports: [MapComponent, ToolbarComponent, TimeSliderComponent, TimeSliderComponent, MatSidenavModule, SearchComponent, BivariateComponent, AutocorrelationComponent],
+  imports: [MapComponent, ToolbarComponent, TimeSliderComponent, TimeSliderComponent, MatSidenavModule, MatTooltipModule, MatIconModule, MatButtonModule, SearchComponent, BivariateComponent, AutocorrelationComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
