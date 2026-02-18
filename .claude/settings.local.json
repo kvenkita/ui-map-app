@@ -1,0 +1,17 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npx ng serve)",
+      "Bash(npm install:*)",
+      "Bash(netstat:*)",
+      "Bash(findstr:*)",
+      "Bash(taskkill:*)",
+      "Bash(cmd /c \"taskkill /PID 19316 /F\")",
+      "Bash(cmd /c \"taskkill /PID 19316 /F 2>&1\")",
+      "Bash(powershell -Command \"Stop-Process -Id 19316 -Force\")",
+      "Bash(powershell -Command \"netstat -ano | Select-String '':4200''\")",
+      "Bash(powershell -Command:*)",
+      "Bash(npx ng:*)"
+    ]
+  }
+}
