@@ -18,3 +18,224 @@ html, body {
   background-color: white;
   cursor: pointer;
 }
+
+/* ── Responsive global ── */
+
+@media (max-width: 768px) {
+  /* Prevent horizontal overflow on small devices */
+  body {
+    overflow-x: hidden;
+  }
+
+  /* Tighter toolbar height on mobile */
+  .mat-toolbar {
+    min-height: 56px !important;
+  }
+
+  /* Slightly smaller logo on mobile */
+  mat-toolbar img {
+    height: 36px !important;
+  }
+
+  /* Tooltip: position above finger on touch */
+  .mat-mdc-tooltip {
+    font-size: 0.8em;
+  }
+}
+
+/* ── Sidebar dark theme: Material form fields ── */
+
+/* Form field outline & label inside sidebar */
+mat-sidenav .mat-mdc-form-field,
+mat-sidenav .mat-mdc-text-field-wrapper {
+  background-color: #2c2c2c !important;
+  border-radius: 8px !important;
+}
+
+mat-sidenav .mat-mdc-form-field-flex {
+  background-color: #2c2c2c !important;
+  border-radius: 8px !important;
+}
+
+mat-sidenav .mdc-text-field--filled {
+  background-color: #2c2c2c !important;
+  border-radius: 8px !important;
+}
+
+mat-sidenav .mdc-text-field--filled:not(.mdc-text-field--disabled) {
+  background-color: #2c2c2c !important;
+}
+
+mat-sidenav .mat-mdc-input-element,
+mat-sidenav input.mat-mdc-input-element {
+  color: #e0e0e0 !important;
+  caret-color: #90caf9 !important;
+}
+
+mat-sidenav .mat-mdc-floating-label,
+mat-sidenav .mdc-floating-label {
+  color: #999 !important;
+}
+
+mat-sidenav .mdc-line-ripple::before,
+mat-sidenav .mdc-line-ripple::after {
+  border-bottom-color: #555 !important;
+}
+
+/* mat-select trigger text */
+mat-sidenav .mat-mdc-select-value-text {
+  color: #e0e0e0 !important;
+}
+
+mat-sidenav .mat-mdc-select-arrow {
+  color: #aaa !important;
+}
+
+/* ── Dropdown panels (mat-select & mat-autocomplete) ── */
+/* These render in an overlay outside mat-sidenav, so we target globally */
+
+.mat-mdc-select-panel,
+.mat-mdc-autocomplete-panel {
+  background-color: #1e1e1e !important;
+  border-radius: 10px !important;
+  border: 1px solid #3a3a3a !important;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.6) !important;
+}
+
+.mat-mdc-select-panel .mat-mdc-option,
+.mat-mdc-autocomplete-panel .mat-mdc-option {
+  color: #e0e0e0 !important;
+}
+
+.mat-mdc-select-panel .mat-mdc-option:hover,
+.mat-mdc-autocomplete-panel .mat-mdc-option:hover {
+  background-color: #2a2a2a !important;
+}
+
+.mat-mdc-select-panel .mat-mdc-option.mdc-list-item--selected,
+.mat-mdc-autocomplete-panel .mat-mdc-option.mdc-list-item--selected {
+  background-color: #333 !important;
+  color: #90caf9 !important;
+}
+
+/* mat-card inside sidenav — strip default white card background */
+mat-sidenav mat-card {
+  background-color: transparent !important;
+  color: #e0e0e0 !important;
+  box-shadow: none !important;
+}
+
+mat-sidenav mat-card-title {
+  color: #e0e0e0 !important;
+  font-size: 0.95em !important;
+}
+
+/* Slide toggle track in dark context */
+mat-sidenav .mat-mdc-slide-toggle .mdc-switch__track {
+  background-color: #555 !important;
+}
+
+/* Info icon in sidebar */
+mat-sidenav .info-icon mat-icon {
+  color: #888;
+}
+
+/* Scrollbar styling for sidebar */
+mat-sidenav .tools-container::-webkit-scrollbar {
+  width: 6px;
+}
+mat-sidenav .tools-container::-webkit-scrollbar-track {
+  background: #1a1a1a;
+}
+mat-sidenav .tools-container::-webkit-scrollbar-thumb {
+  background-color: #444;
+  border-radius: 4px;
+}
+
+/* ── Search box dark theme (global override for Material internals) ── */
+
+app-search .mat-mdc-text-field-wrapper,
+app-search .mdc-text-field--filled {
+  background-color: rgba(26, 26, 26, 0.92) !important;
+  border-radius: 8px !important;
+  backdrop-filter: blur(4px);
+}
+
+app-search .mdc-text-field--filled:not(.mdc-text-field--disabled) {
+  background-color: rgba(26, 26, 26, 0.92) !important;
+}
+
+app-search input.mat-mdc-input-element {
+  color: #e0e0e0 !important;
+  caret-color: #90caf9 !important;
+}
+
+app-search .mat-mdc-floating-label,
+app-search .mdc-floating-label {
+  color: #aaa !important;
+}
+
+app-search .mdc-line-ripple::before,
+app-search .mdc-line-ripple::after {
+  border-bottom-color: #444 !important;
+}
+
+/* ── ArcGIS Legend dark theme ── */
+
+/* Legend container */
+.esri-legend {
+  background-color: rgba(26, 26, 26, 0.92) !important;
+  color: #e0e0e0 !important;
+  border-radius: 8px !important;
+  border: 1px solid #383838 !important;
+  backdrop-filter: blur(4px);
+}
+
+/* Legend header (widget header) */
+.esri-widget--panel .esri-widget__heading,
+.esri-legend .esri-widget__heading {
+  color: #e0e0e0 !important;
+  background-color: transparent !important;
+}
+
+/* Legend layer body */
+.esri-legend__layer-body {
+  background-color: transparent !important;
+}
+
+/* Legend layer table cells and text */
+.esri-legend__layer-cell,
+.esri-legend__layer-cell--info {
+  color: #c8c8c8 !important;
+}
+
+/* Legend service label */
+.esri-legend__service-label {
+  color: #e0e0e0 !important;
+}
+
+/* Legend layer caption row */
+.esri-legend__layer-caption {
+  display: none; /* already hidden, kept for clarity */
+}
+
+/* Override any white backgrounds in legend internals */
+.esri-widget.esri-legend {
+  background-color: rgba(26, 26, 26, 0.92) !important;
+}
+
+.esri-legend .esri-widget__body {
+  background-color: transparent !important;
+}
+
+/* Scrollbar inside legend */
+.esri-legend::-webkit-scrollbar {
+  width: 5px;
+}
+.esri-legend::-webkit-scrollbar-track {
+  background: #1a1a1a;
+}
+.esri-legend::-webkit-scrollbar-thumb {
+  background-color: #444;
+  border-radius: 4px;
+}

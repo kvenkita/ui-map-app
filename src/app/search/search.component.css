@@ -1,5 +1,5 @@
 .search-form {
-    margin-top:30px;
+    margin-top: 30px;
     min-width: 150px;
     max-width: 500px;
     width: 100%;
@@ -7,4 +7,36 @@
 
 .search-form-field {
     width: 100%;
+}
+
+/* Dark themed search box */
+.search-form .mat-mdc-text-field-wrapper,
+.search-form .mdc-text-field--filled {
+    background-color: rgba(26, 26, 26, 0.92) !important;
+    border-radius: 8px !important;
+}
+
+.search-form .mdc-text-field--filled:not(.mdc-text-field--disabled) {
+    background-color: rgba(26, 26, 26, 0.92) !important;
+}
+
+.search-form input.mat-mdc-input-element {
+    color: #e0e0e0 !important;
+    caret-color: #90caf9 !important;
+}
+
+.search-form .mat-mdc-floating-label,
+.search-form .mdc-floating-label {
+    color: #aaa !important;
+}
+
+.search-form .mdc-line-ripple::before,
+.search-form .mdc-line-ripple::after {
+    border-bottom-color: #555 !important;
+}
+
+@media (max-width: 768px) {
+  .search-form {
+    margin-top: 10px;
   }
+}

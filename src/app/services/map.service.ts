@@ -129,6 +129,8 @@ export class MapService {
   private isSidenavOpen = new BehaviorSubject<boolean>(false);
   private mapMode = new BehaviorSubject<MapMode>(MapMode.default);
   private definitionExpressions = new BehaviorSubject<MapDefExpression>({year:''});
+  private currentYear = new BehaviorSubject<number>(0);
+  private hoveredTractId = new BehaviorSubject<string | null>(null);
   projectMaps?: Observable<ModelMap[]>;
 
   constructor() { }
@@ -175,6 +177,22 @@ export class MapService {
 
   setSidenavOpen(state: boolean) {
     return this.isSidenavOpen.next(state);
+  }
+
+  getCurrentYear(): Observable<number> {
+    return this.currentYear.asObservable();
+  }
+
+  setCurrentYear(year: number) {
+    this.currentYear.next(year);
+  }
+
+  getHoveredTractId(): Observable<string | null> {
+    return this.hoveredTractId.asObservable();
+  }
+
+  setHoveredTractId(id: string | null) {
+    this.hoveredTractId.next(id);
   }
 
   getMapMode() {
@@ -228,7 +246,7 @@ export class MapService {
 
   zoomSelectedFeature() {
     try {
-      const graphicExtent = this.graphicsLayer.graphics.getItemAt(0).geometry.extent
+      const graphicExtent = this.graphicsLayer.graphics.getItemAt(0)!.geometry!.extent!
 
       let extent = new EsriExtent({
         xmin: graphicExtent.xmin,
@@ -271,13 +289,25 @@ export class MapService {
           stops: breaks
         })
 
-        this.defaultRenderer.visualVariables = [colorVariable];
-        this.variableFL.renderer = this.defaultRenderer;
-        this.legend.layerInfos = [{layer:this.variableFL}]
+        // Create a fresh renderer each time so ArcGIS detects the change
+        // and the Legend widget updates correctly.
+        this.variableFL.renderer = new SimpleRenderer({
+          symbol: new SimpleFillSymbol({
+            color: [230, 232, 230],
+            style: 'solid',
+            outline: {
+              color: [0, 0, 0, 0.2],
+              width: '2px'
+            }
+          }),
+          visualVariables: [colorVariable]
+        });
+        this.legend.layerInfos = [{layer: this.variableFL}];
       })
     } else if (mapMode == MapMode.autocorrelation) {
       this.autocorrelationRenderer.field = fieldName;
       this.variableFL.renderer = this.autocorrelationRenderer;
+      this.legend.layerInfos = [{layer: this.variableFL}];
     }
   }
 }

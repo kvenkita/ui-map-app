@@ -1,15 +1,36 @@
 ngx-slider {
     width: 500px;
-    margin:10px;
-  }
+    margin: 10px;
+}
 
 .sliderDiv {
   background-color: black;
-  padding-top:30px;
-  padding-bottom:15px;
-  border-radius:35px;
-  opacity:.70;
+  padding-top: 30px;
+  padding-bottom: 15px;
+  border-radius: 35px;
+  opacity: .70;
   border: 1px solid white;
+}
+
+/* ── Tablet ── */
+@media (max-width: 1000px) {
+  ngx-slider {
+    width: 300px;
+  }
+}
+
+/* ── Mobile ── */
+@media (max-width: 768px) {
+  ngx-slider {
+    width: calc(100vw - 80px);
+    margin: 8px;
+  }
+
+  .sliderDiv {
+    border-radius: 20px;
+    padding-top: 24px;
+    padding-bottom: 12px;
+  }
 }
 
 ::ng-deep .sliderDiv > .ngx-slider > .ngx-slider-bubble {

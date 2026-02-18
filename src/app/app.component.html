@@ -2,7 +2,7 @@
     <app-toolbar [toolbar_name]="this.projectName" id="appToolbar"></app-toolbar>
     <app-search #appSearch></app-search>
     <mat-sidenav-container class="sidenav-container">
-        <mat-sidenav #sidenav mode="side" [(opened)]="isSidenavOpen" class="sidebar">
+        <mat-sidenav #sidenav [mode]="isMobile ? 'over' : 'side'" [(opened)]="isSidenavOpen" class="sidebar">
             <div class="sidebar-header">
                 <h2>Advanced Analytics</h2>
                 <button mat-icon-button class="close-btn" (click)="toggleSidenav()">
@@ -35,8 +35,9 @@
             </div>
         </mat-sidenav>
         <mat-sidenav-content>
-            
+
             <app-map id="appMap"></app-map>
+            <app-tract-chart></app-tract-chart>
             <app-time-slider id="appTime"></app-time-slider>
         </mat-sidenav-content>
     </mat-sidenav-container>

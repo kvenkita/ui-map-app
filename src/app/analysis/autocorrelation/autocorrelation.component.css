@@ -1,7 +1,10 @@
 #autocorrelationCard {
     margin: 5px;
     padding: 5px;
-    border: 1px solid #c0c0c0;
+    background-color: transparent;
+    border: none;
+    box-shadow: none;
+    color: #e0e0e0;
 }
 
 #autocorrelation-header {
@@ -9,3 +12,21 @@
     justify-content: space-between;
 }
 
+#autocorrelationCard mat-card-title a {
+    color: #90caf9;
+}
+
+#autocorrelationCard p {
+    color: #b0b0b0;
+    font-size: 0.9em;
+}
+
+/* Rounded mat-select */
+#autocorrelationCard mat-select {
+    border-radius: 8px;
+}
+
+/* Label color */
+#autocorrelationCard mat-label {
+    color: #b0b0b0;
+}

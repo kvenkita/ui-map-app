@@ -55,7 +55,7 @@ export class BivariateComponent implements OnInit {
       });
 
   // possible schemes - 9, 11, 14, 15, 17, 19, 20
-  bivariateScheme = this.schemes.secondarySchemes.filter((scheme) => scheme.name == 'Strawberry Tulips')[0]; 
+  bivariateScheme = this.schemes!.secondarySchemes.filter((scheme) => scheme.name == 'Strawberry Tulips')[0];
 
   ngOnInit(): void {
     // console.log(this.mapService.featureLayer)

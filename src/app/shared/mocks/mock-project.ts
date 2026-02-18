@@ -1,19 +1,10 @@
 import {Project} from '../models/project';
 import {MapToolCategory} from '../enums/map-tool-category.enum';
-import Basemap from "@arcgis/core/Basemap.js";
 
 export const PROJECT: Project[] = [{
     projectId: 1,
     name: 'Carolinas Regional Explorer',
-    // basemap: 'dark-gray',
-    basemap: new Basemap({
-      portalItem: {
-        id: "f35ef07c9ed24020aadd65c8a65d3754",
-        url: "https://www.arcgis.com"
-      },
-      title: "Modern Antique Map",
-      thumbnailUrl: "https://static-map-tiles-api.arcgis.com/arcgis/rest/services/static-basemap-tiles-service/v1/arcgis/navigation/tile/{Z}/{X}/{Y}.png"
-    }),
+    basemap: 'dark-gray-vector',
     center: [-80.7366, 35.3081],
     zoom: 9,
     maps: [

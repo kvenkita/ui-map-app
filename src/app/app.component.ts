@@ -18,15 +18,17 @@ import { MatButtonModule } from '@angular/material/button';
 import { SearchComponent } from "./search/search.component";
 import { BivariateComponent } from "./analysis/bivariate/bivariate.component";
 import { AutocorrelationComponent } from "./analysis/autocorrelation/autocorrelation.component";
+import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
+import { TractChartComponent } from "./tract-chart/tract-chart.component";
 
 @Component({
   selector: 'app-root',
-  imports: [MapComponent, ToolbarComponent, TimeSliderComponent, TimeSliderComponent, MatSidenavModule, MatTooltipModule, MatIconModule, MatButtonModule, SearchComponent, BivariateComponent, AutocorrelationComponent],
+  imports: [MapComponent, ToolbarComponent, TimeSliderComponent, TimeSliderComponent, MatSidenavModule, MatTooltipModule, MatIconModule, MatButtonModule, SearchComponent, BivariateComponent, AutocorrelationComponent, TractChartComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
 export class AppComponent implements OnInit {
-  constructor(private mapService: MapService) { }
+  constructor(private mapService: MapService, private breakpointObserver: BreakpointObserver) { }
 
   async initializeApp() {
     await this.setProject(projectConfig.projectId);
@@ -37,6 +39,7 @@ export class AppComponent implements OnInit {
   projectId?:number;
 
   isSidenavOpen?:boolean;
+  isMobile: boolean = false;
 
 
   setProject(id: number): void {
@@ -55,7 +58,16 @@ export class AppComponent implements OnInit {
 
     this.mapService.getSidenavOpen().subscribe((state) => {
       this.isSidenavOpen = state;
-    })
+    });
+
+    this.breakpointObserver.observe([Breakpoints.Handset, Breakpoints.TabletPortrait, '(max-width: 768px)'])
+      .subscribe(result => {
+        this.isMobile = result.matches;
+        // Auto-close sidebar on small screens when it first loads
+        if (this.isMobile && this.isSidenavOpen) {
+          this.isSidenavOpen = false;
+        }
+      });
   }
 
   toggleSidenav() {

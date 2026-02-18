@@ -1,1 +1,6 @@
 <div #mapViewNode></div>
+
+<div #mapTooltip class="map-tooltip" [class.visible]="tooltipVisible">
+  <div class="map-tooltip__label">{{ tooltipLabel }}</div>
+  <div class="map-tooltip__value">{{ tooltipValue }}</div>
+</div>

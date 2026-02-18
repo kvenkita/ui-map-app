@@ -1,4 +1,4 @@
-import { Component, ViewChild, ElementRef, OnInit, OnDestroy } from '@angular/core';
+import { Component, ViewChild, ElementRef, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
 
 import Map from '@arcgis/core/Map';
 import MapView from '@arcgis/core/views/MapView';
@@ -34,18 +34,23 @@ export class MapComponent implements OnInit, OnDestroy {
   public map?: Map;
 
   @ViewChild('mapViewNode', { static: true }) private mapViewEl!: ElementRef;
+  @ViewChild('mapTooltip', { static: true }) private mapTooltipEl!: ElementRef;
 
   private variableSubscription:Subscription;
   private mapModeSubscription?:Subscription;
+  private pointerMoveHandle: any = null;
 
   project?:Project;
   projectMaps: ModelMap[] = [];
   currentVariable: MapVariable = MAP_VARIABLE[0];
   mapMode:MapMode = MapMode.default;
-  
 
-  constructor(private mapService: MapService) {
+  // Tooltip state
+  tooltipVisible = false;
+  tooltipLabel = '';
+  tooltipValue = '';
 
+  constructor(private mapService: MapService, private cdr: ChangeDetectorRef) {
     this.variableSubscription = this.mapService.getCurrentVariable().subscribe((value) => {});
   }
 
@@ -129,6 +134,7 @@ export class MapComponent implements OnInit, OnDestroy {
 
     this.mapService.mapView.when(() => {
 
+      this.setupHoverTooltip();
       this.mapService.esriMap.add(this.mapService.graphicsLayer);
 
       const clearWidget = new MapButtonWidget({
@@ -211,9 +217,76 @@ export class MapComponent implements OnInit, OnDestroy {
     });
   }
 
+  setupHoverTooltip(): void {
+    const tooltipEl: HTMLElement = this.mapTooltipEl.nativeElement;
+    const mapContainer: HTMLElement = this.mapViewEl.nativeElement;
+
+    // Remove any previous listener
+    if (this.pointerMoveHandle) {
+      this.pointerMoveHandle.remove();
+    }
+
+    this.pointerMoveHandle = this.mapService.mapView.on('pointer-move', (event: any) => {
+      this.mapService.mapView.hitTest(event, { include: [this.mapService.variableFL] })
+        .then((response: any) => {
+          const result = response.results?.[0];
+
+          if (result?.graphic) {
+            const attrs = result.graphic.attributes;
+            const variable = this.currentVariable;
+            const rawValue = attrs[variable.fieldName];
+
+            // Format value based on variable type
+            let formatted: string;
+            if (rawValue == null || rawValue === '' || isNaN(rawValue)) {
+              formatted = 'N/A';
+            } else if (variable.valueType === 'percentage') {
+              formatted = `${(Math.round(parseFloat(rawValue) * 10) / 10).toLocaleString()}%`;
+            } else if (variable.valueType === 'money') {
+              formatted = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 }).format(rawValue);
+            } else {
+              formatted = (Math.round(parseFloat(rawValue) * 10) / 10).toLocaleString();
+            }
+
+            this.tooltipLabel = variable.name;
+            this.tooltipValue = formatted;
+            this.tooltipVisible = true;
+
+            // Position tooltip near cursor, keeping within map bounds
+            const mapRect = mapContainer.getBoundingClientRect();
+            const offset = 16;
+            let x = event.x + offset;
+            let y = event.y + offset;
+
+            // Clamp so tooltip doesn't overflow the right/bottom edge
+            const ttWidth = tooltipEl.offsetWidth || 180;
+            const ttHeight = tooltipEl.offsetHeight || 60;
+            if (x + ttWidth > mapRect.width) { x = event.x - ttWidth - offset; }
+            if (y + ttHeight > mapRect.height) { y = event.y - ttHeight - offset; }
+
+            tooltipEl.style.left = `${x}px`;
+            tooltipEl.style.top = `${y}px`;
+
+            // Emit tract id for the chart panel (debounced in chart component)
+            const tractId = attrs['crdt_unique_id'];
+            if (tractId) {
+              this.mapService.setHoveredTractId(tractId);
+            }
+          } else {
+            this.tooltipVisible = false;
+            this.mapService.setHoveredTractId(null);
+          }
+
+          this.cdr.detectChanges();
+        });
+    });
+  }
+
   ngOnDestroy(): void {
+    if (this.pointerMoveHandle) {
+      this.pointerMoveHandle.remove();
+    }
     if (this.view) {
-      // destroy the map view
       this.view.destroy();
     }
   }

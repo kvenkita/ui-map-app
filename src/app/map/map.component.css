@@ -20,3 +20,46 @@
   ::ng-deep .esri-legend__layer-caption {
     display: none;
   }
+
+/* ── Hover tooltip ── */
+.map-tooltip {
+  position: absolute;
+  pointer-events: none;
+  z-index: 10;
+  background-color: rgba(26, 26, 26, 0.93);
+  border: 1px solid #383838;
+  border-radius: 8px;
+  padding: 8px 12px;
+  min-width: 160px;
+  max-width: 220px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.55);
+  backdrop-filter: blur(4px);
+  opacity: 0;
+  transform: translateY(-4px);
+  transition: opacity 0.12s ease, transform 0.12s ease;
+  /* hidden by default — positioned by JS */
+  top: 0;
+  left: 0;
+}
+
+.map-tooltip.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.map-tooltip__label {
+  font-size: 0.75em;
+  color: #999;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  margin-bottom: 4px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.map-tooltip__value {
+  font-size: 1.1em;
+  font-weight: 500;
+  color: #e0e0e0;
+}

@@ -1,0 +1,82 @@
+.tract-chart-panel {
+  position: absolute;
+  right: 16px;
+  top: 240px;
+  width: 320px;
+  background-color: rgba(22, 22, 22, 0.94);
+  border: 1px solid #383838;
+  border-radius: 10px;
+  padding: 14px 14px 10px;
+  box-shadow: 0 6px 24px rgba(0,0,0,0.6);
+  backdrop-filter: blur(6px);
+  z-index: 5;
+  opacity: 0;
+  transform: translateX(12px);
+  pointer-events: none;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.tract-chart-panel.visible {
+  opacity: 1;
+  transform: translateX(0);
+  pointer-events: auto;
+}
+
+.chart-header {
+  margin-bottom: 10px;
+}
+
+.chart-title {
+  font-size: 0.78em;
+  color: #999;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 2px;
+}
+
+.chart-subtitle {
+  font-size: 1em;
+  font-weight: 500;
+  color: #e0e0e0;
+}
+
+.chart-body {
+  height: 180px;
+  position: relative;
+}
+
+.chart-body canvas {
+  width: 100% !important;
+  height: 100% !important;
+}
+
+.chart-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  color: #666;
+  font-size: 0.85em;
+}
+
+/* Custom legend strip (Chart.js built-in legend is hidden via JS config) */
+.chart-legend-labels {
+  display: none; /* Chart.js renders its own legend inside the canvas area */
+}
+
+/* Responsive: on small screens, tuck under the search box */
+@media (max-width: 768px) {
+  .tract-chart-panel {
+    right: 8px;
+    left: 8px;
+    width: auto;
+    top: auto;
+    bottom: 100px;
+  }
+}
+
+@media (min-width: 769px) and (max-width: 1024px) {
+  .tract-chart-panel {
+    width: 280px;
+  }
+}

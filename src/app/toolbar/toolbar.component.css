@@ -7,74 +7,116 @@
   background-color: none;
 }
 
+#left-sidenav__title {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 200px;
+}
+
 #right-sidenav {
   display: flex;
   flex-direction: row;
   justify-content: flex-end;
   width: 100%;
-  min-width:200px;
+  min-width: 200px;
   margin-left: 10px;
+  overflow: hidden;
 }
 
 #categoryGroup {
   overflow-x: scroll;
-  scrollbar-width: none; 
+  scrollbar-width: none;
   -ms-overflow-style: none;
   cursor: grab;
-}
-
-@media(max-width:1000px) {
-  #categoryGroup {
-    scrollbar-width: thin;
-    margin: 10px;
-  }
 }
 
 #variablesDiv {
   display: inline-block;
   position: absolute;
-  
   flex-direction: row;
   justify-content: center;
   top: 130px;
   left: 50%;
   transform: translate(-50%, -50%);
-  margin:0px;
-  padding:0%;
+  margin: 0px;
+  padding: 0%;
   background-color: none;
   z-index: 2;
   opacity: .95;
-  /* min-width: 800px; */
   max-height: 95px;
   overflow-y: auto;
   scrollbar-width: thin;
 }
 
 #variableGroup {
-  /* display: flex !important; */
   flex-wrap: wrap;
   gap: 2px;
   justify-content: center;
   border: none;
-  /* padding: 0px 300px; */
   display: inline-flex;
   overflow: hidden;
   border-radius: 4px;
- 
 }
 
-@media (max-width:1000px) {
+/* ── Tablet (769px – 1000px) ── */
+@media (max-width: 1000px) {
+  #categoryGroup {
+    scrollbar-width: thin;
+    margin: 10px;
+  }
+
   #variablesDiv {
     width: 310px;
     overflow-x: hidden;
     scrollbar-width: thin;
+    /* Keep desktop centering transform at tablet */
+    top: 130px;
+    left: 50%;
+    transform: translate(-50%, -50%);
   }
 
   #variableGroup {
     flex-wrap: nowrap;
     flex-direction: column;
     align-items: center;
-    
   }
-  
+}
+
+/* ── Mobile (≤ 768px) ── */
+@media (max-width: 768px) {
+  #left-sidenav__title {
+    display: none;
+  }
+
+  #right-sidenav {
+    min-width: 0;
+    margin-left: 4px;
+  }
+
+  #categoryGroup {
+    max-width: calc(100vw - 120px);
+    scrollbar-width: none;
+  }
+
+  /* Push variables bar down below toolbar on mobile */
+  #variablesDiv {
+    top: 68px;           /* sits just below the 56-64px toolbar */
+    left: 0;
+    transform: none;     /* reset desktop centering transform */
+    width: 100%;
+    max-width: 100%;
+    max-height: 80px;
+    overflow-y: auto;
+  }
+
+  #variableGroup {
+    flex-wrap: nowrap;
+    flex-direction: row;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: thin;
+    width: 100%;
+    justify-content: flex-start;
+  }
 }

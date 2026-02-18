@@ -64,6 +64,7 @@ export class TimeSliderComponent implements OnInit {
 
     this.defExpressions.year = `year = ${this.value}`
     this.mapService.updateDefinitionExpressions(this.defExpressions);
+    this.mapService.setCurrentYear(this.value);
 
     // this.mapService.variableFL.definitionExpression = `year = ${this.value}`;
     this.mapService.variableFL.definitionExpression = this.defExpressionString;

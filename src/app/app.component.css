@@ -25,7 +25,7 @@
 mat-sidenav {
   width: 400px;
   padding: 0;
-  background-color: #f5f5f5;
+  background-color: #1a1a1a;
 }
 
 .sidebar-header {
@@ -33,9 +33,9 @@ mat-sidenav {
   justify-content: space-between;
   align-items: center;
   padding: 16px;
-  background-color: #333;
+  background-color: #000;
   color: white;
-  border-bottom: 1px solid #ddd;
+  border-bottom: 1px solid #333;
 }
 
 .sidebar-header h2 {
@@ -53,12 +53,22 @@ mat-sidenav {
   height: calc(100% - 60px);
 }
 
+/* Two subtle dark shades to distinguish the tool boxes */
 .tool-item {
-  margin-bottom: 24px;
-  padding: 12px;
-  background-color: white;
-  border-radius: 4px;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  margin-bottom: 20px;
+  padding: 14px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.4);
+}
+
+.tool-item:nth-child(odd) {
+  background-color: #252525;
+  border: 1px solid #383838;
+}
+
+.tool-item:nth-child(even) {
+  background-color: #1e2a1e;
+  border: 1px solid #2e3e2e;
 }
 
 .tool-header {
@@ -66,24 +76,75 @@ mat-sidenav {
   align-items: center;
   margin-bottom: 12px;
   padding-bottom: 8px;
-  border-bottom: 1px solid #eee;
+  border-bottom: 1px solid #3a3a3a;
 }
 
 .tool-header h3 {
   margin: 0;
-  font-size: 1.1em;
+  font-size: 1.0em;
   flex-grow: 1;
+  color: #e0e0e0;
 }
 
 .info-icon {
   cursor: pointer;
   margin-left: 8px;
+  color: #aaa;
 }
 
 app-search {
   position: absolute;
   width: 300px;
   right: 15px;
-  top: 50px;
+  /* Sit below toolbar (~64px) + variables bar (~110px) with breathing room */
+  top: 178px;
   z-index: 3;
+}
+
+/* ── Responsive: tablet and mobile ── */
+
+@media (max-width: 768px) {
+  mat-sidenav {
+    width: 100vw;
+    max-width: 100vw;
+  }
+
+  .sidebar-header h2 {
+    font-size: 1em;
+  }
+
+  .tools-container {
+    padding: 12px;
+  }
+
+  .tool-item {
+    padding: 10px;
+    margin-bottom: 14px;
+  }
+
+  .tool-header h3 {
+    font-size: 0.9em;
+  }
+
+  app-search {
+    /* Variables bar: top 68px + max 80px height = ends at ~148px.
+       Place search below with a small gap. */
+    width: calc(100% - 30px);
+    right: 15px;
+    left: 15px;
+    top: 156px;
+  }
+}
+
+@media (min-width: 769px) and (max-width: 1024px) {
+  mat-sidenav {
+    width: 340px;
+  }
+
+  app-search {
+    width: 240px;
+    /* Variables bar is 310px wide centered; search at right won't overlap,
+       but still keep below toolbar + variables band */
+    top: 178px;
+  }
 }

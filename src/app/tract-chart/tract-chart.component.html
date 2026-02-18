@@ -1,0 +1,21 @@
+<div class="tract-chart-panel" [class.visible]="visible">
+
+  <div class="chart-header">
+    <div class="chart-title">{{ variableName }}</div>
+    <div class="chart-subtitle">{{ tractName }}</div>
+  </div>
+
+  <div class="chart-body">
+    <div *ngIf="loading" class="chart-loading">
+      <span class="loading-dots">Loading<span>...</span></span>
+    </div>
+    <canvas #chartCanvas *ngIf="!loading"></canvas>
+  </div>
+
+  <div class="chart-legend-labels">
+    <span class="legend-dot tract-dot"></span><span class="legend-text">This tract</span>
+    <span class="legend-dot county-dot"></span><span class="legend-text">County avg</span>
+    <span class="legend-dot region-dot"></span><span class="legend-text">Region avg</span>
+  </div>
+
+</div>
