@@ -286,19 +286,13 @@ export class MapComponent implements OnInit, OnDestroy {
     }
 
     this.clickHandle = this.mapService.mapView.on('click', (event: any) => {
-      this.mapService.mapView.hitTest(event)
+      this.mapService.mapView.hitTest(event, { include: [this.mapService.variableFL] })
         .then((response: any) => {
-          const tractResult = response.results?.find((result: any) => {
-            const attrs = result?.graphic?.attributes;
-            return attrs && attrs['crdt_unique_id'] != null;
-          });
+          const result = response.results?.[0];
+          const tractId = result?.graphic?.attributes?.['crdt_unique_id'];
 
-          const tractId = tractResult?.graphic?.attributes?.['crdt_unique_id'];
-
-          if (tractId != null) {
-            this.mapService.setHoveredTractId(String(tractId));
-          } else {
-            this.mapService.setHoveredTractId(null);
+          if (tractId) {
+            this.mapService.setHoveredTractId(tractId);
           }
         });
     });
