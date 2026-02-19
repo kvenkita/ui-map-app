@@ -8,6 +8,8 @@ import BasemapGallery from "@arcgis/core/widgets/BasemapGallery.js";
 import classBreaks from "@arcgis/core/smartMapping/statistics/classBreaks.js";
 import ColorVariable from '@arcgis/core/renderers/visualVariables/ColorVariable';
 import Expand from '@arcgis/core/widgets/Expand';
+import Graphic from '@arcgis/core/Graphic';
+import SimpleFillSymbol from '@arcgis/core/symbols/SimpleFillSymbol';
 
 import { MapService } from '../services/map.service'
 
@@ -39,6 +41,7 @@ export class MapComponent implements OnInit, OnDestroy {
   private variableSubscription:Subscription;
   private mapModeSubscription?:Subscription;
   private pointerMoveHandle: any = null;
+  private clickHandle: any = null;
 
   project?:Project;
   projectMaps: ModelMap[] = [];
@@ -108,6 +111,8 @@ export class MapComponent implements OnInit, OnDestroy {
           constraints:{minZoom:this.project.zoom-1}
         });
 
+    this.mapService.mapView.popupEnabled = false;
+
     let homeWidget =  new Home({
       view: this.mapService.mapView
     });  
@@ -135,6 +140,7 @@ export class MapComponent implements OnInit, OnDestroy {
     this.mapService.mapView.when(() => {
 
       this.setupHoverTooltip();
+      this.setupTractClickChart();
       this.mapService.esriMap.add(this.mapService.graphicsLayer);
 
       const clearWidget = new MapButtonWidget({
@@ -267,14 +273,8 @@ export class MapComponent implements OnInit, OnDestroy {
             tooltipEl.style.left = `${x}px`;
             tooltipEl.style.top = `${y}px`;
 
-            // Emit tract id for the chart panel (debounced in chart component)
-            const tractId = attrs['crdt_unique_id'];
-            if (tractId) {
-              this.mapService.setHoveredTractId(tractId);
-            }
           } else {
             this.tooltipVisible = false;
-            this.mapService.setHoveredTractId(null);
           }
 
           this.cdr.detectChanges();
@@ -282,9 +282,59 @@ export class MapComponent implements OnInit, OnDestroy {
     });
   }
 
+  setupTractClickChart(): void {
+    if (this.clickHandle) {
+      this.clickHandle.remove();
+    }
+
+    this.clickHandle = this.mapService.mapView.on('click', (event: any) => {
+      this.mapService.mapView.hitTest(event, { include: [this.mapService.variableFL] })
+        .then((response: any) => {
+          const tractResult = response.results?.find((result: any) => {
+            const attrs = result?.graphic?.attributes;
+            return attrs && attrs['crdt_unique_id'] != null;
+          });
+
+          const tractGraphic = tractResult?.graphic;
+          const tractId = tractGraphic?.attributes?.['crdt_unique_id'];
+
+          if (tractId != null) {
+            this.highlightSelectedTract(tractGraphic);
+            this.mapService.setHoveredTractId(String(tractId));
+          } else {
+            this.mapService.clearSelectedFeatures();
+            this.mapService.setHoveredTractId(null);
+          }
+        });
+    });
+  }
+
+  highlightSelectedTract(tractGraphic: any): void {
+    this.mapService.clearSelectedFeatures();
+
+    const selectedSymbol = new SimpleFillSymbol({
+      color: [0, 0, 0, 0],
+      style: 'solid',
+      outline: {
+        color: [255, 255, 255, 0.95],
+        width: 2.5
+      }
+    });
+
+    const selectedGraphic = new Graphic({
+      geometry: tractGraphic.geometry,
+      symbol: selectedSymbol
+    });
+
+    this.mapService.graphicsLayer.add(selectedGraphic);
+  }
+
   ngOnDestroy(): void {
     if (this.pointerMoveHandle) {
       this.pointerMoveHandle.remove();
+    }
+    if (this.clickHandle) {
+      this.clickHandle.remove();
     }
     if (this.view) {
       this.view.destroy();
