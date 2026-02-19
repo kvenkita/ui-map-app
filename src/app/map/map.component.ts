@@ -290,43 +290,14 @@ export class MapComponent implements OnInit, OnDestroy {
     this.clickHandle = this.mapService.mapView.on('click', (event: any) => {
       this.mapService.mapView.hitTest(event, { include: [this.mapService.variableFL] })
         .then((response: any) => {
-          const tractResult = response.results?.find((result: any) => {
-            const attrs = result?.graphic?.attributes;
-            return attrs && attrs['crdt_unique_id'] != null;
-          });
+          const result = response.results?.[0];
+          const tractId = result?.graphic?.attributes?.['crdt_unique_id'];
 
-          const tractGraphic = tractResult?.graphic;
-          const tractId = tractGraphic?.attributes?.['crdt_unique_id'];
-
-          if (tractId != null) {
-            this.highlightSelectedTract(tractGraphic);
-            this.mapService.setHoveredTractId(String(tractId));
-          } else {
-            this.mapService.clearSelectedFeatures();
-            this.mapService.setHoveredTractId(null);
+          if (tractId) {
+            this.mapService.setHoveredTractId(tractId);
           }
         });
     });
-  }
-
-  highlightSelectedTract(tractGraphic: any): void {
-    this.mapService.clearSelectedFeatures();
-
-    const selectedSymbol = new SimpleFillSymbol({
-      color: [0, 0, 0, 0],
-      style: 'solid',
-      outline: {
-        color: [255, 255, 255, 0.95],
-        width: 2.5
-      }
-    });
-
-    const selectedGraphic = new Graphic({
-      geometry: tractGraphic.geometry,
-      symbol: selectedSymbol
-    });
-
-    this.mapService.graphicsLayer.add(selectedGraphic);
   }
 
   ngOnDestroy(): void {
