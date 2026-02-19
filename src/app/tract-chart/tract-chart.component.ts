@@ -3,8 +3,8 @@ import {
   AfterViewInit, ChangeDetectorRef
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Subscription, combineLatest } from 'rxjs';
-import { debounceTime, distinctUntilChanged, filter } from 'rxjs/operators';
+import { Subscription } from 'rxjs';
+import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 
 import { Chart, registerables } from 'chart.js';
 Chart.register(...registerables);
@@ -42,17 +42,17 @@ export class TractChartComponent implements OnInit, OnDestroy, AfterViewInit {
     this.subs.push(
       this.mapService.getCurrentVariable().subscribe(v => {
         this.currentVariable = v;
-        // Reload chart if a tract is already hovered
+        // Reload chart if a tract is already selected
         if (this.currentTractId) {
           this.loadChartData(this.currentTractId);
         }
       })
     );
 
-    // React to hovered tract changes (debounced to avoid hammering the server)
+    // React to selected tract changes
     this.subs.push(
       this.mapService.getHoveredTractId().pipe(
-        debounceTime(300),
+        debounceTime(150),
         distinctUntilChanged()
       ).subscribe(tractId => {
         this.currentTractId = tractId;
@@ -61,6 +61,7 @@ export class TractChartComponent implements OnInit, OnDestroy, AfterViewInit {
           this.loadChartData(tractId);
         } else {
           this.visible = false;
+          this.chart?.destroy();
           this.cdr.detectChanges();
         }
       })
@@ -68,6 +69,15 @@ export class TractChartComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   ngAfterViewInit(): void {}
+
+  closeChart(): void {
+    this.visible = false;
+    this.currentTractId = null;
+    this.mapService.setHoveredTractId(null);
+    this.chart?.destroy();
+    this.cdr.detectChanges();
+  }
+
 
   ngOnDestroy(): void {
     this.subs.forEach(s => s.unsubscribe());
@@ -228,8 +238,8 @@ export class TractChartComponent implements OnInit, OnDestroy, AfterViewInit {
           {
             label: this.tractName,
             data: tractSeries,
-            borderColor: '#90caf9',
-            backgroundColor: 'rgba(144,202,249,0.12)',
+            borderColor: '#43a2ca',
+            backgroundColor: 'rgba(67,162,202,0.14)',
             borderWidth: 2.5,
             pointRadius: 3,
             pointHoverRadius: 5,
@@ -239,8 +249,8 @@ export class TractChartComponent implements OnInit, OnDestroy, AfterViewInit {
           {
             label: countyLabel,
             data: countySeries,
-            borderColor: '#77791e',
-            backgroundColor: 'rgba(119,121,30,0.1)',
+            borderColor: '#0868ac',
+            backgroundColor: 'rgba(8,104,172,0.14)',
             borderWidth: 2,
             borderDash: [5, 3],
             pointRadius: 2,
@@ -251,8 +261,8 @@ export class TractChartComponent implements OnInit, OnDestroy, AfterViewInit {
           {
             label: 'Region Avg',
             data: regionSeries,
-            borderColor: '#888',
-            backgroundColor: 'rgba(136,136,136,0.08)',
+            borderColor: '#7fbf7b',
+            backgroundColor: 'rgba(127,191,123,0.14)',
             borderWidth: 1.5,
             borderDash: [3, 3],
             pointRadius: 2,
@@ -270,7 +280,7 @@ export class TractChartComponent implements OnInit, OnDestroy, AfterViewInit {
           legend: {
             position: 'bottom',
             labels: {
-              color: '#b0b0b0',
+              color: '#d9d9d9',
               font: { size: 10 },
               boxWidth: 14,
               padding: 8
@@ -293,12 +303,12 @@ export class TractChartComponent implements OnInit, OnDestroy, AfterViewInit {
         },
         scales: {
           x: {
-            ticks: { color: '#888', font: { size: 10 } },
+            ticks: { color: '#bfbfbf', font: { size: 10 } },
             grid: { color: 'rgba(255,255,255,0.05)' }
           },
           y: {
             ticks: {
-              color: '#888',
+              color: '#bfbfbf',
               font: { size: 10 },
               callback: (val) => this.formatLabel(Number(val), variable.valueType)
             },
