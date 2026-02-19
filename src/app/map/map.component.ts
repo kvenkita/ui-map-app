@@ -39,6 +39,7 @@ export class MapComponent implements OnInit, OnDestroy {
   private variableSubscription:Subscription;
   private mapModeSubscription?:Subscription;
   private pointerMoveHandle: any = null;
+  private clickHandle: any = null;
 
   project?:Project;
   projectMaps: ModelMap[] = [];
@@ -108,6 +109,8 @@ export class MapComponent implements OnInit, OnDestroy {
           constraints:{minZoom:this.project.zoom-1}
         });
 
+    this.mapService.mapView.popupEnabled = false;
+
     let homeWidget =  new Home({
       view: this.mapService.mapView
     });  
@@ -135,6 +138,7 @@ export class MapComponent implements OnInit, OnDestroy {
     this.mapService.mapView.when(() => {
 
       this.setupHoverTooltip();
+      this.setupTractClickChart();
       this.mapService.esriMap.add(this.mapService.graphicsLayer);
 
       const clearWidget = new MapButtonWidget({
@@ -267,14 +271,8 @@ export class MapComponent implements OnInit, OnDestroy {
             tooltipEl.style.left = `${x}px`;
             tooltipEl.style.top = `${y}px`;
 
-            // Emit tract id for the chart panel (debounced in chart component)
-            const tractId = attrs['crdt_unique_id'];
-            if (tractId) {
-              this.mapService.setHoveredTractId(tractId);
-            }
           } else {
             this.tooltipVisible = false;
-            this.mapService.setHoveredTractId(null);
           }
 
           this.cdr.detectChanges();
@@ -282,9 +280,36 @@ export class MapComponent implements OnInit, OnDestroy {
     });
   }
 
+  setupTractClickChart(): void {
+    if (this.clickHandle) {
+      this.clickHandle.remove();
+    }
+
+    this.clickHandle = this.mapService.mapView.on('click', (event: any) => {
+      this.mapService.mapView.hitTest(event)
+        .then((response: any) => {
+          const tractResult = response.results?.find((result: any) => {
+            const attrs = result?.graphic?.attributes;
+            return attrs && attrs['crdt_unique_id'] != null;
+          });
+
+          const tractId = tractResult?.graphic?.attributes?.['crdt_unique_id'];
+
+          if (tractId != null) {
+            this.mapService.setHoveredTractId(String(tractId));
+          } else {
+            this.mapService.setHoveredTractId(null);
+          }
+        });
+    });
+  }
+
   ngOnDestroy(): void {
     if (this.pointerMoveHandle) {
       this.pointerMoveHandle.remove();
+    }
+    if (this.clickHandle) {
+      this.clickHandle.remove();
     }
     if (this.view) {
       this.view.destroy();

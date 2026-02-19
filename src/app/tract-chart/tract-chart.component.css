@@ -2,9 +2,9 @@
   position: absolute;
   right: 16px;
   top: 240px;
-  width: 320px;
-  background-color: rgba(22, 22, 22, 0.94);
-  border: 1px solid #383838;
+  width: 340px;
+  background-color: rgba(20, 28, 36, 0.94);
+  border: 1px solid #2f4553;
   border-radius: 10px;
   padding: 14px 14px 10px;
   box-shadow: 0 6px 24px rgba(0,0,0,0.6);
@@ -24,11 +24,26 @@
 
 .chart-header {
   margin-bottom: 10px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.chart-close-btn {
+  width: 26px;
+  height: 26px;
+  border: 1px solid #365161;
+  border-radius: 6px;
+  background: rgba(9, 20, 28, 0.8);
+  color: #dce9f2;
+  cursor: pointer;
+  line-height: 1;
 }
 
 .chart-title {
   font-size: 0.78em;
-  color: #999;
+  color: #9fb4c3;
   text-transform: uppercase;
   letter-spacing: 0.05em;
   margin-bottom: 2px;
@@ -55,16 +70,14 @@
   align-items: center;
   justify-content: center;
   height: 100%;
-  color: #666;
+  color: #90a7b6;
   font-size: 0.85em;
 }
 
-/* Custom legend strip (Chart.js built-in legend is hidden via JS config) */
 .chart-legend-labels {
-  display: none; /* Chart.js renders its own legend inside the canvas area */
+  display: none;
 }
 
-/* Responsive: on small screens, tuck under the search box */
 @media (max-width: 768px) {
   .tract-chart-panel {
     right: 8px;
@@ -77,6 +90,6 @@
 
 @media (min-width: 769px) and (max-width: 1024px) {
   .tract-chart-panel {
-    width: 280px;
+    width: 300px;
   }
 }
